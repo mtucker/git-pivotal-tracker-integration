@@ -190,6 +190,16 @@ describe GitPivotalTrackerIntegration::Util::Git do
     GitPivotalTrackerIntegration::Util::Git.merge PivotalTracker::Story.new(:id => 12345678), nil
   end
 
+  it 'should rebase and delete branches' do
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:branch_name).and_return('development_branch')
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:get_config).with('root-branch', :branch).and_return('master')
+    GitPivotalTrackerIntegration::Util::Shell.should_receive(:exec).with('git checkout --quiet master')
+    GitPivotalTrackerIntegration::Util::Shell.should_receive(:exec).with('git rebase --quiet development_branch')
+    GitPivotalTrackerIntegration::Util::Shell.should_receive(:exec).with('git branch --quiet -D development_branch')
+
+    GitPivotalTrackerIntegration::Util::Git.rebase PivotalTracker::Story.new(:id => 12345678), nil
+  end
+
   it 'should suppress Completes statement' do
     GitPivotalTrackerIntegration::Util::Git.should_receive(:branch_name).and_return('development_branch')
     GitPivotalTrackerIntegration::Util::Git.should_receive(:get_config).with('root-branch', :branch).and_return('master')

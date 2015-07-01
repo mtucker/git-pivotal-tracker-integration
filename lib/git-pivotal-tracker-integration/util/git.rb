@@ -148,6 +148,25 @@ class GitPivotalTrackerIntegration::Util::Git
     puts 'OK'
   end
 
+  # Rebases the current branch onto its root branch and deletes the current branch
+  #
+  # @param [PivotalTracker::Story] story the story associated with the current branch
+  # @param [Boolean] no_complete whether to suppress the +Completes+ statement in the commit message
+  # @return [void]
+  def self.rebase(story, no_complete)
+    development_branch = branch_name
+    root_branch = get_config KEY_ROOT_BRANCH, :branch
+
+    print "Rebasing #{development_branch} onto #{root_branch}... "
+    GitPivotalTrackerIntegration::Util::Shell.exec "git checkout --quiet #{root_branch}"
+    GitPivotalTrackerIntegration::Util::Shell.exec "git rebase --quiet #{development_branch}"
+    puts 'OK'
+
+    print "Deleting #{development_branch}... "
+    GitPivotalTrackerIntegration::Util::Shell.exec "git branch --quiet -D #{development_branch}"
+    puts 'OK'
+  end
+
   # Push changes to the remote of the current branch
   #
   # @param [String] refs the explicit references to push

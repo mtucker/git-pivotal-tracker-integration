@@ -33,7 +33,7 @@ describe GitPivotalTrackerIntegration::Command::Finish do
     @finish = GitPivotalTrackerIntegration::Command::Finish.new
   end
 
-  it 'should run' do
+  it 'should run merge' do
     GitPivotalTrackerIntegration::Util::Git.should_receive(:trivial_merge?)
     GitPivotalTrackerIntegration::Command::Configuration.any_instance.should_receive(:story)
     GitPivotalTrackerIntegration::Util::Git.should_receive(:merge)
@@ -41,5 +41,15 @@ describe GitPivotalTrackerIntegration::Command::Finish do
     GitPivotalTrackerIntegration::Util::Git.should_receive(:push).with('master')
 
     @finish.run nil
+  end
+
+  it 'should run rebase' do
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:trivial_merge?)
+    GitPivotalTrackerIntegration::Command::Configuration.any_instance.should_receive(:story)
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:rebase)
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:branch_name).and_return('master')
+    GitPivotalTrackerIntegration::Util::Git.should_receive(:push).with('master')
+
+    @finish.run "--rebase"
   end
 end
