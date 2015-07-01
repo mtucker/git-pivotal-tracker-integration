@@ -28,15 +28,15 @@ class GitPivotalTrackerIntegration::Command::Finish < GitPivotalTrackerIntegrati
   #
   # @return [void]
   def run(argument)
-    no_complete = argument =~ /--no-complete/
+    no_finishes = argument =~ /--no-finishes/
     rebase = argument =~ /--rebase/
 
     GitPivotalTrackerIntegration::Util::Git.trivial_merge?
 
     if rebase
-      GitPivotalTrackerIntegration::Util::Git.rebase(@configuration.story(@project), no_complete)
+      GitPivotalTrackerIntegration::Util::Git.rebase(@configuration.story(@project), no_finishes)
     else
-      GitPivotalTrackerIntegration::Util::Git.merge(@configuration.story(@project), no_complete)
+      GitPivotalTrackerIntegration::Util::Git.merge(@configuration.story(@project), no_finishes)
     end
 
     GitPivotalTrackerIntegration::Util::Git.push GitPivotalTrackerIntegration::Util::Git.branch_name

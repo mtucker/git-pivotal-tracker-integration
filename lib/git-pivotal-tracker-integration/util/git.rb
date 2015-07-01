@@ -134,13 +134,13 @@ class GitPivotalTrackerIntegration::Util::Git
   # @param [PivotalTracker::Story] story the story associated with the current branch
   # @param [Boolean] no_complete whether to suppress the +Completes+ statement in the commit message
   # @return [void]
-  def self.merge(story, no_complete)
+  def self.merge(story, no_finish)
     development_branch = branch_name
     root_branch = get_config KEY_ROOT_BRANCH, :branch
 
     print "Merging #{development_branch} to #{root_branch}... "
     GitPivotalTrackerIntegration::Util::Shell.exec "git checkout --quiet #{root_branch}"
-    GitPivotalTrackerIntegration::Util::Shell.exec "git merge --quiet --no-ff -m \"Merge #{development_branch} to #{root_branch}\n\n[#{no_complete ? '' : 'Completes '}##{story.id}]\" #{development_branch}"
+    GitPivotalTrackerIntegration::Util::Shell.exec "git merge --quiet --no-ff -m \"Merge #{development_branch} to #{root_branch}\n\n[#{no_finish ? '' : 'Finishes '}##{story.id}]\" #{development_branch}"
     puts 'OK'
 
     print "Deleting #{development_branch}... "
@@ -153,7 +153,7 @@ class GitPivotalTrackerIntegration::Util::Git
   # @param [PivotalTracker::Story] story the story associated with the current branch
   # @param [Boolean] no_complete whether to suppress the +Completes+ statement in the commit message
   # @return [void]
-  def self.rebase(story, no_complete)
+  def self.rebase(story, no_finish)
     development_branch = branch_name
     root_branch = get_config KEY_ROOT_BRANCH, :branch
 
