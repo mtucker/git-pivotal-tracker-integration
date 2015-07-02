@@ -63,6 +63,13 @@ class GitPivotalTrackerIntegration::Util::Story
     story
   end
 
+  def self.finish(story) 
+
+    attrs = {:current_state => 'Finished'}
+    story.update(attrs)
+
+  end
+
   private
 
   CANDIDATE_STATES = %w(rejected unstarted unscheduled).freeze
