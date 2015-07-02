@@ -165,6 +165,12 @@ class GitPivotalTrackerIntegration::Util::Git
     print "Deleting #{development_branch}... "
     GitPivotalTrackerIntegration::Util::Shell.exec "git branch --quiet -D #{development_branch}"
     puts 'OK'
+
+    if !no_finish
+      print "Marking story #{story.id} as Finished"
+      GitPivotalTrackerIntegration::Util::Story.finish(story)
+    end
+
   end
 
   # Push changes to the remote of the current branch

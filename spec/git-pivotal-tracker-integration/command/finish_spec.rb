@@ -49,6 +49,7 @@ describe GitPivotalTrackerIntegration::Command::Finish do
     GitPivotalTrackerIntegration::Util::Git.should_receive(:rebase)
     GitPivotalTrackerIntegration::Util::Git.should_receive(:branch_name).and_return('master')
     GitPivotalTrackerIntegration::Util::Git.should_receive(:push).with('master')
+    GitPivotalTrackerIntegration::Util::Story.should_receive(:finish)
 
     @finish.run "--rebase"
   end
